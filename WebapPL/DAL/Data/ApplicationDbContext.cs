@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using DAL.Data.Entities;
+
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Data
@@ -11,5 +13,15 @@ namespace DAL.Data
 
         }   
         public virtual DbSet<Author> Authors { get; set; }
+        public virtual DbSet<Biography> Biographies { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Author>()
+                .HasOne(a => a.Biography)
+                .WithOne(b => b.Author)
+                .HasForeignKey<Biography>(b => b.AuthorId);
+            base.OnModelCreating(builder);
+        }
     }
 }
